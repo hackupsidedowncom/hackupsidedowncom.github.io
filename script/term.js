@@ -34,11 +34,6 @@ shell
 
 terminal.open(document.getElementById('term'))
 
-//	Wait for the logo intro animation
-setTimeout(() => {
-	terminal.write('\n')
-	// Start the Read-Eval-Print-Loop
-	shell.repl()
+shell.repl()
 
-	terminal.focus()
-}, 800)
+terminal.focus()
