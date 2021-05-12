@@ -16,19 +16,20 @@ const lines = [
 	`${colour('lightGreen') }██   ██ ██████   █████  ██   ██${colour('lightRed')   } ██  ██████  ██████  ██      ██ ${colourEnd()}`
 ]
 
-//	Simple animation for logo
-let timeout = 200
-lines.forEach(line => setTimeout(() => terminal.write(line + '\r\n'), timeout+=100))
-
 const shell = new XtermJSShell.default(terminal)
 
 shell
 .command('help', async (shell) => {
+	await shell.printLine('')
+	await Promise.all(lines.map(async (line) => await shell.printLine(line)))
+	await shell.printLine('')
 	await shell.printLine(`Try running one of these commands:\r\n${shell.commands.map((command) => ` - ${command}`).join('\n')}`)
 })
-
+.command('clear', async (shell, args) => {
+	terminal.clear()
+})
 .command('ls', async (shell, args) => {
-	terminal.write('This is ʞɔɐɥ.com - you can do anything at ʞɔɐɥ dot com!' + '\r\n')
+	await shell.printLine(`This is ${colour('lightRed')}ʞ${colour('magenta')}ɔ${colour('blue')}ɐ${colour('cyan')}ɥ${colour('lightGreen')}.${colour('cyan')}c${colour('blue')}o${colour('magenta')}m${colourEnd()} - you can't (yet) do anything at ʞɔɐɥ dot com!`)
 })
 
 terminal.open(document.getElementById('term'))
