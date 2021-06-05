@@ -7,6 +7,18 @@ const bgColours = { 'black': '40', 'red': '41', 'green': '42', 'yellow': '43', '
 //	Ref: https://dev.to/ifenna__/adding-colors-to-bash-scripts-48g4
 const colour = (col) => '\u001b['+colours[col]+'m'
 const colourEnd = () => '\33[0m'
+const writeSlowly = (txt) => {
+	let time = 0
+	const randomIntFromInterval = (min, max) => {
+		return Math.floor(Math.random() * (max - min + 1) + min)
+	}
+	const write = t => {
+		setTimeout(() => terminal.write(t), time)
+		time += randomIntFromInterval(80, 300)
+	}
+	txt.split('').map((t) => write(t))
+	setTimeout(() => shell.printLine(''), time)
+}
 
 const lines = [
 	`${colour('lightRed')   }██   ██ ██████  ██   ██ ██   ██${colour('lightGreen') }     ██████  ██████  ███    ███ ${colourEnd()}`,
@@ -37,3 +49,5 @@ terminal.open(document.getElementById('term'))
 shell.repl()
 
 terminal.focus()
+
+writeSlowly('Wake up, Neo...')
