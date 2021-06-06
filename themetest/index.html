@@ -13,6 +13,7 @@
 			color: #fff;
 			font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
 			margin: 0;
+			box-sizing: border-box;
 		}
 
 		main {
@@ -51,6 +52,7 @@
 		h1, h2, h3, h4, h5, h6 {
 			color: #F5CF66;
 			font-weight: 300;
+			margin: 0
 		}
 
 		.inputText {
@@ -66,34 +68,46 @@
 			border: 1px solid #F5CF66;
 			padding: 1rem;
 			box-shadow: 0 0 5px rgba(245, 207, 102, 0.4), inset 0 0 5px rgba(245, 207, 102, 0.3), 0 2px 0 #000;
-			margin: 1rem 0;
+			margin: 0;
 		}
 
-		.menu {
-			font-size: 0.8rem;
-			letter-spacing: 0.1rem;
-			background-color: #1f1f21;
-			padding: 0.5rem;
-			text-transform: uppercase;
+		.menu { font-size: 0.8rem; letter-spacing: 0.1rem; background-color: #1f1f21; padding: 0.5rem; text-transform: uppercase; }
+		.menu ul { list-style-type: none; padding-inline-start: 0; }
+		.menu li { padding: 0.25rem 1rem; cursor: pointer; }
+		.menu li.selected,
+		.menu li:hover { background-color: #F5CF66; color: #1f1f21; }
+
+		.tabset { font-size: 0.8rem; letter-spacing: 0.1rem; background-color: #1f1f21; padding: 0; text-transform: uppercase; }
+		.tabset ul { list-style-type: none; padding-inline-start: 0; display: flex; margin: 0; }
+		.tabset li { padding: 0.25rem 1rem; cursor: pointer; border: 1px solid #312607; border-bottom-color: transparent; border-left-color: transparent; }
+		.tabset li.end { margin-left: auto; padding: 0.25rem 1rem; cursor: pointer; border: 1px solid #312607; border-bottom: 1px solid #312607; border-left: 1px solid #312607; }
+		.tabset li.selected,
+		.tabset li:hover { background-color: #F5CF66; color: #1f1f21; border-color: transparent; }
+
+		.terminal {
+			border: 1px solid #F5CF66;
+			padding: 1rem;
+			box-shadow: 0 0 5px rgba(245, 207, 102, 0.4), inset 0 0 5px rgba(245, 207, 102, 0.3), 0 2px 0 #000;
+			margin: 0;
+			min-height: 40rem;
+			background-color: #000;
 		}
 
-		.menu ul {
-			list-style-type: none;
-			padding-inline-start: 0;
+		.terminals {
+			flex: 1;
+			margin: 0 1rem 0 0;
 		}
-		.menu li {
-			padding: 0.25rem 1rem;
-			cursor: pointer;
+
+		.layout {
+			display: flex;
+			flex-direction: row;
 		}
-		.menu li.selected, .menu li:hover {
-			background-color: #F5CF66;
-			color: #1f1f21;
-		}
+
 	</style>
 </head>
 
 <body>
-	<header>
+	<!-- <header>
 		<span class="">ʞɔɐɥ.com</span>
 	</header>
 
@@ -122,8 +136,78 @@
 		</p>
 
 		<a href="#">Link me</a>
+	</main> -->
+
+
+	<main class="layout">
+		<!-- <section class="box">
+			<nav class="menu">
+				<ul>
+					<li>Welcome</li>
+					<li class="selected">Terminal</li>
+					<li>Linux instance</li>
+					<li>What is this?</li>
+				</ul>
+			</nav>
+		</section> -->
+		<section class="box terminals">
+			<nav class="tabset">
+				<ul>
+					<li class="selected">Terminal 1</li>
+					<li> + </li>
+					<li class="end">☰</li>
+				</ul>
+			</nav>
+			<section class="terminal">
+				$ >_
+			</section>
+		</section>
+		<section class="box">
+			<nav class="menu">
+				<ul>
+					<li>Welcome</li>
+					<li class="selected">Recipe</li>
+					<li>Linux instance</li>
+					<li>What is this?</li>
+				</ul>
+			</nav>
+			<section class="box" id="recipe">
+
+			</section>
+		</section>
 	</main>
 
+	<script src="markdown-it.12.0.6.min.js"></script>
+
+	<script>
+
+		//	Grab recipe
+		fetch('./recipe-wpa-crack.md')
+			.then(response => response.text())
+			.then(text => {
+				//	WARNING: The is a POC, ie: Super-naive parsing, not for production!!!
+				//	Parse the comment with the values
+				
+				const bits = text.split('[//]: # (')
+				if(bits.length > 1) {
+					//	Yes, I know eval is evil, this is just POC, remember?
+					let values = eval('(' + bits[1].split('})')[0] + '}' + ')')
+					console.log(values)
+					/*
+					let result
+					with(values) {
+						result = eval('`' + text.split('`').join('\\`') + '`')
+					}
+					console.log(result)
+					//	We now have a template, and values, and a way to render them...
+					*/
+				}
+				
+				document.getElementById('recipe').innerHTML = window.markdownit().render(text)
+
+			})
+
+	</script>
 
 </body>
 
